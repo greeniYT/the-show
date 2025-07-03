@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Show</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: green;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .play-button {
+      background: white;
+      border: none;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-family: sans-serif;
+      cursor: pointer;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s;
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .play-button:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    #the-gif {
+      position: absolute;
+      width: 150px;
+      height: auto;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <button class="play-button" id="playBtn">▶ Play</button>
+  <img src="the-show.gif" alt="Bouncing GIF" id="the-gif">
+  <audio id="bg-audio" loop>
+    <source src="funny.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const playButton = document.getElementById('playBtn');
+    const gif = document.getElementById('the-gif');
+    const audio = document.getElementById('bg-audio');
+
+    playButton.addEventListener('click', () => {
+      playButton.style.display = 'none';
+
+      audio.addEventListener('canplaythrough', () => {
+        audio.play().catch(e => console.log('Audio play blocked:', e));
+
+        setTimeout(() => {
+          startBouncing(gif);
+        }, 17000);
+      });
+    });
+
+    function startBouncing(element) {
+      let x = window.innerWidth / 2 - element.offsetWidth / 2;
+      let y = window.innerHeight / 2 - element.offsetHeight / 2;
+      let dx = 2;
+      let dy = 2;
+
+      element.style.transform = 'none';
+
+      setInterval(() => {
+        const maxX = window.innerWidth - element.offsetWidth;
+        const maxY = window.innerHeight - element.offsetHeight;
+
+        x += dx;
+        y += dy;
+
+        if (x <= 0 || x >= maxX) dx = -dx;
+        if (y <= 0 || y >= maxY) dy = -dy;
+
+        element.style.left = x + 'px';
+        element.style.top = y + 'px';
+      }, 10);
+    }
+  </script>
+</body>
+</html>
